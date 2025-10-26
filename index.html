@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EducaBooks - Útiles Universitarios</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal active">
+        <div class="modal-content auth-container">
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Iniciar Sesión</button>
+                <button class="auth-tab" data-tab="register">Registrarse</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form active">
+                <h2>Bienvenido a EducaBooks</h2>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="tu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                <p class="demo-text">Demo: usa email@test.com / 123456</p>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form">
+                <h2>Crear Cuenta</h2>
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="registerName" placeholder="Tu nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="tu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="registerPassword" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" id="registerPhone" placeholder="+51 999 999 999" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="app-container hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-emoji">📚</span>
+                    <h1>EducaBooks</h1>
+                </div>
+                <nav class="nav-menu">
+                    <button class="nav-btn active" data-page="home">Inicio</button>
+                    <button class="nav-btn" data-page="products">Productos</button>
+                    <button class="nav-btn" data-page="purchases">Mis Compras</button>
+                    <button class="nav-btn" data-page="forum">Foro</button>
+                    <button class="nav-btn" data-page="cart">🛒 Carrito</button>
+                </nav>
+                <div class="user-menu">
+                    <span id="userName" class="user-name"></span>
+                    <button id="logoutBtn" class="btn btn-secondary">Salir</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Pages Container -->
+        <main class="pages-container">
+            <!-- Home Page -->
+            <section id="homePage" class="page active">
+                <div class="hero">
+                    <div class="hero-content">
+                        <h2>Bienvenido a EducaBooks</h2>
+                        <p>Tu librería de útiles universitarios de confianza</p>
+                        <button class="btn btn-primary" onclick="goToPage('products')">Ver Productos</button>
+                    </div>
+                    <div class="hero-emoji">📖</div>
+                </div>
+
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-emoji">📋</div>
+                        <h3>Copias</h3>
+                        <p>Copias de calidad a precios accesibles</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-emoji">🖨️</div>
+                        <h3>Impresión</h3>
+                        <p>Impresión profesional en color y B/N</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-emoji">✏️</div>
+                        <h3>Útiles</h3>
+                        <p>Amplio catálogo de útiles escolares</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-emoji">🚚</div>
+                        <h3>Entrega Rápida</h3>
+                        <p>Entrega en 24 horas en Lima</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Products Page -->
+            <section id="productsPage" class="page">
+                <div class="page-header">
+                    <h2>Nuestros Productos</h2>
+                    <input type="text" id="searchInput" class="search-box" placeholder="Buscar productos...">
+                </div>
+                <div id="productsGrid" class="products-grid"></div>
+            </section>
+
+            <!-- Purchases Page -->
+            <section id="purchasesPage" class="page">
+                <div class="page-header">
+                    <h2>Mis Compras</h2>
+                </div>
+                <div id="purchasesList" class="purchases-list"></div>
+            </section>
+
+            <!-- Forum Page -->
+            <section id="forumPage" class="page">
+                <div class="page-header">
+                    <h2>Foro - Comentarios y Opiniones</h2>
+                </div>
+                <div class="forum-container">
+                    <div class="new-comment-form">
+                        <h3>Deja tu comentario</h3>
+                        <textarea id="commentText" placeholder="Comparte tu opinión sobre nuestros productos..." rows="4"></textarea>
+                        <button class="btn btn-primary" onclick="addComment()">Publicar Comentario</button>
+                    </div>
+                    <div id="commentsList" class="comments-list"></div>
+                </div>
+            </section>
+
+            <!-- Cart Page -->
+            <section id="cartPage" class="page">
+                <div class="page-header">
+                    <h2>Carrito de Compras</h2>
+                </div>
+                <div class="cart-container">
+                    <div id="cartItems" class="cart-items"></div>
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">S/ 0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>IGV (18%):</span>
+                            <span id="igv">S/ 0.00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span id="total">S/ 0.00</span>
+                        </div>
+                        <button class="btn btn-primary full-width" onclick="goToCheckout()">Proceder al Pago</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Checkout Page -->
+            <section id="checkoutPage" class="page">
+                <div class="page-header">
+                    <h2>Método de Pago</h2>
+                </div>
+                <div class="checkout-container">
+                    <div class="payment-methods">
+                        <div class="payment-option" onclick="selectPayment('yape')">
+                            <div class="payment-emoji">📱</div>
+                            <h3>Yape</h3>
+                            <p>Pago instantáneo por Yape</p>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('plin')">
+                            <div class="payment-emoji">💳</div>
+                            <h3>Plin</h3>
+                            <p>Pago instantáneo por Plin</p>
+                        </div>
+                    </div>
+                    <div id="paymentDetails" class="payment-details hidden">
+                        <h3>Instrucciones de Pago</h3>
+                        <div id="paymentInfo"></div>
+                        <button class="btn btn-primary full-width" onclick="completePayment()">Confirmar Pago</button>
+                        <button class="btn btn-secondary full-width" onclick="goToPage('cart')">Volver al Carrito</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Chatbox -->
+        <div class="chatbox">
+            <div class="chatbox-header" onclick="toggleChat()">
+                <span>💬 Soporte EducaBooks</span>
+                <span class="chatbox-toggle">−</span>
+            </div>
+            <div id="chatMessages" class="chatbox-messages">
+                <div class="chat-message bot">
+                    <p>Hola, ¿en qué puedo ayudarte?</p>
+                </div>
+            </div>
+            <div class="chatbox-input">
+                <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
+                <button onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
